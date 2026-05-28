@@ -24,89 +24,101 @@
         color: var(--text);
         line-height: 1.5;
       }
-      .wrap { max-width: 820px; margin: 0 auto; padding: 32px 20px 80px; }
+      .wrap { max-width: 880px; margin: 0 auto; padding: 28px 20px 80px; }
       h1 { font-size: 22px; margin: 0 0 4px; }
-      .sub { color: var(--muted); margin: 0 0 28px; font-size: 14px; }
+      .sub { color: var(--muted); margin: 0 0 22px; font-size: 14px; }
+
+      /* ===== Status banner ===== */
+      .banner {
+        border-radius: 14px; padding: 22px 26px; margin-bottom: 22px;
+        display: flex; align-items: center; justify-content: space-between; gap: 20px;
+        color: #fff; transition: background .3s ease;
+        background: linear-gradient(135deg, #1a7f37, #2ea043);
+        box-shadow: 0 4px 18px rgba(26,127,55,.25);
+      }
+      .banner.down { background: linear-gradient(135deg, #b91c1c, #ef4444); box-shadow: 0 4px 18px rgba(207,34,46,.3); }
+      .banner .big { display: flex; align-items: center; gap: 14px; }
+      .banner .lamp {
+        width: 16px; height: 16px; border-radius: 50%; background: #fff;
+        box-shadow: 0 0 0 4px rgba(255,255,255,.35); animation: pulse 1.6s ease-in-out infinite;
+      }
+      @keyframes pulse { 50% { box-shadow: 0 0 0 9px rgba(255,255,255,.12); } }
+      .banner .label { font-size: 26px; font-weight: 800; letter-spacing: .02em; }
+      .banner .label small { display:block; font-size: 12px; font-weight: 500; opacity: .9; letter-spacing: 0; }
+      .banner .stats { display: flex; gap: 26px; text-align: right; }
+      .banner .stat .n { font-size: 26px; font-weight: 800; line-height: 1; }
+      .banner .stat .t { font-size: 11px; opacity: .9; text-transform: uppercase; letter-spacing: .04em; }
 
       .card {
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 1px 2px rgba(31, 35, 40, 0.04);
+        background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+        padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(31,35,40,.04);
       }
-      .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 0 0 14px; display:flex; justify-content:space-between; align-items:center;}
+      .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 0 0 14px; display:flex; justify-content:space-between; align-items:center; }
       .card h2 .cfg { text-transform: none; letter-spacing: 0; font-weight: 400; }
 
       .models { display: flex; flex-direction: column; gap: 8px; }
       .modelrow {
         display: flex; align-items: center; justify-content: space-between;
-        padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
-        background: var(--bg);
+        padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg);
+        transition: opacity .3s, border-color .3s;
       }
+      .modelrow.down { opacity: .55; border-color: var(--down); }
       .modelrow .name { font-family: ui-monospace, monospace; font-size: 14px; }
       .modelrow .order { color: var(--muted); margin-right: 10px; font-size: 12px; }
-      .toggle {
-        border: 1px solid var(--border); background: var(--panel); color: var(--text);
-        padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;
-      }
+      .toggle { border: 1px solid var(--border); background: var(--panel); color: var(--text); padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; }
       .toggle:hover { border-color: var(--muted); }
       .toggle.down { border-color: var(--down); color: var(--down); }
       .pill { font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
       .pill.up { background: rgba(26,127,55,.12); color: var(--ok); }
       .pill.dn { background: rgba(154,103,0,.12); color: var(--down); }
 
+      .chaos { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border); }
+      .btn { border: 1px solid var(--border); background: var(--panel); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
+      .btn:hover { border-color: var(--muted); }
+      .btn.kill { border-color: var(--err); color: var(--err); }
+      .btn.chaos-on { background: var(--err); color: #fff; border-color: var(--err); }
+      .btn.accent { background: var(--accent); color:#fff; border-color: var(--accent); }
+
       .inputrow { display: flex; gap: 10px; }
-      textarea {
-        flex: 1; resize: vertical; min-height: 60px; background: var(--bg);
-        border: 1px solid var(--border); color: var(--text); border-radius: 8px;
-        padding: 10px 12px; font-size: 14px; font-family: inherit;
-      }
+      textarea { flex: 1; resize: vertical; min-height: 56px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 10px 12px; font-size: 14px; font-family: inherit; }
       textarea:focus { outline: none; border-color: var(--accent); }
-      .send {
-        background: var(--accent); border: none; color: #fff; font-weight: 600;
-        padding: 0 22px; border-radius: 8px; cursor: pointer; font-size: 14px;
-      }
+      .send { background: var(--accent); border: none; color: #fff; font-weight: 600; padding: 0 22px; border-radius: 8px; cursor: pointer; font-size: 14px; }
       .send:disabled { opacity: .5; cursor: default; }
 
-      .chain { display: flex; flex-direction: column; gap: 0; }
-      .step { display: flex; align-items: flex-start; gap: 14px; }
+      /* ===== Trails ===== */
+      .chain { display: flex; flex-direction: column; }
+      .step { display: flex; align-items: flex-start; gap: 12px; }
       .rail { display: flex; flex-direction: column; align-items: center; }
-      .dot {
-        width: 26px; height: 26px; border-radius: 50%; flex: none;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 14px; font-weight: 700; border: 2px solid var(--border);
-        background: var(--panel);
-      }
+      .dot { width: 24px; height: 24px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; border: 2px solid var(--border); background: var(--panel); }
       .dot.ok { border-color: var(--ok); color: var(--ok); }
       .dot.error { border-color: var(--err); color: var(--err); }
       .dot.down { border-color: var(--down); color: var(--down); }
       .dot.trying { border-color: var(--accent); color: var(--accent); }
-      .dot.spin { animation: spin 0.8s linear infinite; }
+      .dot.spin { animation: spin .8s linear infinite; }
       @keyframes spin { to { transform: rotate(360deg); } }
-      .line { width: 2px; flex: 1; min-height: 26px; background: var(--border); }
+      .line { width: 2px; flex: 1; min-height: 22px; background: var(--border); }
       .step:last-child .line { display: none; }
-      .stepbody { padding-bottom: 18px; flex: 1; }
-      .stepbody .m { font-family: ui-monospace, monospace; font-size: 14px; }
+      .stepbody { padding-bottom: 16px; flex: 1; }
+      .stepbody .m { font-family: ui-monospace, monospace; font-size: 13px; }
       .stepbody .meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
       .meta .ms { color: var(--text); }
-      .meta .tag { display:inline-block; background: rgba(9,105,218,.1); color: var(--accent); border-radius: 4px; padding: 0 5px; font-size: 11px; margin-left:4px;}
-      .badge {
-        display: inline-block; margin-bottom: 14px; font-size: 13px; font-weight: 600;
-        padding: 8px 14px; border-radius: 8px;
-        background: rgba(26,127,55,.1); border: 1px solid var(--ok); color: var(--ok);
-      }
+      .meta .tag { display:inline-block; background: rgba(9,105,218,.1); color: var(--accent); border-radius: 4px; padding: 0 5px; font-size: 11px; margin-left:4px; }
+      .badge { display: inline-block; margin-bottom: 12px; font-size: 13px; font-weight: 600; padding: 7px 12px; border-radius: 8px; background: rgba(26,127,55,.1); border: 1px solid var(--ok); color: var(--ok); }
       .badge.fail { background: rgba(207,34,46,.1); border-color: var(--err); color: var(--err); }
       .badge.work { background: rgba(9,105,218,.1); border-color: var(--accent); color: var(--accent); }
-      .answer {
-        margin-top: 14px; padding: 14px; background: var(--bg); border: 1px solid var(--border);
-        border-radius: 8px; white-space: pre-wrap; font-size: 14px; min-height: 20px;
-      }
-      .answer .caret { display:inline-block; width:7px; height:15px; background:var(--accent); vertical-align:-2px; animation: blink 1s step-start infinite; }
+      .answer { margin-top: 12px; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; white-space: pre-wrap; font-size: 13px; min-height: 18px; }
+      .answer .caret { display:inline-block; width:7px; height:14px; background:var(--accent); vertical-align:-2px; animation: blink 1s step-start infinite; }
       @keyframes blink { 50% { opacity: 0; } }
       .empty { color: var(--muted); font-size: 14px; }
       .hint { font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+      /* ===== A/B ===== */
+      .ab { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .col { border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+      .col h3 { margin: 0 0 10px; font-size: 13px; }
+      .col.bad h3 { color: var(--err); }
+      .col.good h3 { color: var(--ok); }
+      @media (max-width: 680px) { .ab { grid-template-columns: 1fr; } .banner { flex-direction: column; align-items: flex-start; } .banner .stats { text-align: left; } }
 
       table { width: 100%; border-collapse: collapse; font-size: 13px; }
       th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--border); }
@@ -118,30 +130,58 @@
   <body>
     <div class="wrap">
       <h1>Gemini Fallback Demo</h1>
-      <p class="sub">
-        Each request walks the model chain top to bottom. A failing model is retried,
-        then it falls back to the next one. The answer streams in live from whichever model responds.
-      </p>
+      <p class="sub">Knock models offline and watch the service keep answering. Requests walk the chain top to bottom, retry, then fall back.</p>
 
-      <div class="card">
-        <h2>Model chain <span class="cfg" id="cfg"></span></h2>
-        <div class="models" id="models"></div>
-        <p class="hint">Click “Take down” to force a model offline and watch the fallback happen.</p>
-      </div>
-
-      <div class="card">
-        <h2>Prompt</h2>
-        <div class="inputrow">
-          <textarea id="prompt" placeholder="Ask anything…">Explain in two sentences what a fallback chain is and why it is useful.</textarea>
-          <button class="send" id="send">Send</button>
+      <!-- STATUS BANNER -->
+      <div class="banner" id="banner">
+        <div class="big">
+          <div class="lamp"></div>
+          <div class="label">SERVICE: UP<small id="bannerSub">all systems answering</small></div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="n" id="stDown">0/0</div><div class="t">models down</div></div>
+          <div class="stat"><div class="n" id="stServed">0</div><div class="t">requests served</div></div>
+          <div class="stat"><div class="n" id="stErr">0</div><div class="t">errors to users</div></div>
         </div>
       </div>
 
+      <!-- MODELS + CHAOS -->
       <div class="card">
-        <h2>What happened</h2>
-        <div id="result"><p class="empty">Send a prompt — the attempt trail and streamed answer will appear here.</p></div>
+        <h2>Model chain <span class="cfg" id="cfg"></span></h2>
+        <div class="models" id="models"></div>
+        <div class="chaos">
+          <button class="btn kill" id="killBtn">🔥 Kill random model</button>
+          <button class="btn" id="reviveBtn">↻ Revive all</button>
+          <button class="btn chaos" id="chaosBtn">▶ Auto-chaos</button>
+          <span class="hint" id="chaosHint" style="margin:auto 0">Auto-chaos kills models at random and fires a request every 4s.</span>
+        </div>
       </div>
 
+      <!-- A/B -->
+      <div class="card">
+        <h2>Side by side: no fallback vs fallback</h2>
+        <div class="inputrow" style="margin-bottom:14px">
+          <textarea id="abPrompt">Say hi in 3 words.</textarea>
+          <button class="send" id="abBtn">Run A/B</button>
+        </div>
+        <p class="hint" style="margin-top:0">Tip: take down the top model (or run auto-chaos), then hit “Run A/B”. The left column errors out; the right one falls back and still answers.</p>
+        <div class="ab" style="margin-top:14px">
+          <div class="col bad"><h3>✕ Without fallback (top model only)</h3><div id="abLeft"><p class="empty">—</p></div></div>
+          <div class="col good"><h3>✓ With fallback (full chain)</h3><div id="abRight"><p class="empty">—</p></div></div>
+        </div>
+      </div>
+
+      <!-- SINGLE -->
+      <div class="card">
+        <h2>Single request</h2>
+        <div class="inputrow">
+          <textarea id="prompt">Explain in two sentences what a fallback chain is and why it is useful.</textarea>
+          <button class="send" id="send">Send</button>
+        </div>
+        <div id="result" style="margin-top:14px"><p class="empty">Send a prompt — the attempt trail and streamed answer will appear here.</p></div>
+      </div>
+
+      <!-- LOG -->
       <div class="card">
         <h2>Request log</h2>
         <div id="log"><p class="empty">No requests yet.</p></div>
@@ -150,171 +190,210 @@
 
     <script>
       const $ = (s) => document.querySelector(s);
-      const modelsEl = $("#models");
-      const resultEl = $("#result");
-      const logEl = $("#log");
+      const icons = { ok: "✓", error: "✕", down: "⚠", trying: "•" };
+      const labels = { ok: "answered", error: "error → retry/fallback", down: "taken down → fallback", trying: "trying…" };
 
+      // ---- SSE streaming into a callback ----
+      async function streamChat(prompt, opts, onEvent) {
+        const resp = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt, ...opts }),
+        });
+        const reader = resp.body.getReader();
+        const dec = new TextDecoder();
+        let buf = "";
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buf += dec.decode(value, { stream: true });
+          let nl;
+          while ((nl = buf.indexOf("\n\n")) >= 0) {
+            const raw = buf.slice(0, nl).trim();
+            buf = buf.slice(nl + 2);
+            if (raw.startsWith("data:")) onEvent(JSON.parse(raw.slice(5).trim()));
+          }
+        }
+      }
+
+      // ---- A view = its own trail state + render target ----
+      function makeView(el, { compact } = {}) {
+        const v = { steps: [], badge: "", answer: "", streaming: false };
+        v.render = () => {
+          let h = v.badge;
+          h += '<div class="chain">';
+          for (const a of v.steps) {
+            const spin = a.status === "trying" ? " spin" : "";
+            h += `<div class="step"><div class="rail"><div class="dot ${a.status}${spin}">${icons[a.status] || "?"}</div><div class="line"></div></div>
+              <div class="stepbody"><div class="m">${a.model}${a.retry ? `<span class="meta tag">retry ${a.retry.n}/${a.retry.of}</span>` : ""}</div>
+              <div class="meta">${labels[a.status] || a.status}${a.ms ? ` · <span class="ms">${a.ms} ms</span>` : ""}${a.reason ? ` · ${a.reason}` : ""}</div></div></div>`;
+          }
+          h += "</div>";
+          if (v.answer || v.streaming) h += `<div class="answer">${v.answer.replace(/</g, "&lt;")}${v.streaming ? '<span class="caret"></span>' : ""}</div>`;
+          el.innerHTML = h;
+        };
+        v.setBadge = (kind, text) => {
+          const cls = kind === "ok" ? "badge" : kind === "fail" ? "badge fail" : "badge work";
+          v.badge = `<div class="${cls}">${text}</div>`;
+        };
+        v.handle = (ev) => {
+          if (ev.type === "attempt") {
+            const i = v.steps.findIndex((s) => s.status === "trying" && s.model === ev.model);
+            const row = { model: ev.model, status: ev.status, ms: ev.ms, reason: ev.reason, retry: ev.retry };
+            if (i >= 0) v.steps[i] = row; else v.steps.push(row);
+          } else if (ev.type === "retry") {
+            v.setBadge("work", `Retrying ${ev.model} (${ev.next}/${ev.of}) after ${ev.delayMs}ms…`);
+          } else if (ev.type === "served") {
+            v.steps.push({ model: ev.model, status: "trying" });
+            v.setBadge("work", `Streaming from ${ev.model}…`);
+          } else if (ev.type === "token") {
+            v.answer += ev.text;
+          } else if (ev.type === "done") {
+            v.setBadge("ok", `Answered by <b>${ev.servedBy}</b>${ev.fallbacks > 0 ? ` · fell back after ${ev.fallbacks} failure(s)` : " · on first try"}`);
+          } else if (ev.type === "failed") {
+            v.setBadge("fail", ev.error || "All models unavailable");
+          }
+          v.render();
+        };
+        v.reset = () => { v.steps = []; v.badge = ""; v.answer = ""; v.streaming = true; };
+        return v;
+      }
+
+      async function runView(v, prompt, opts) {
+        v.reset();
+        v.setBadge("work", "Walking the model chain…");
+        v.render();
+        try {
+          await streamChat(prompt, opts, v.handle);
+        } catch (e) {
+          v.setBadge("fail", "Network error: " + e);
+        } finally {
+          v.streaming = false;
+          v.render();
+        }
+      }
+
+      // ---- Models panel ----
       async function loadModels() {
         const r = await fetch("/api/models");
         const d = await r.json();
         $("#cfg").textContent = `retries: ${d.retryCount} · delay: ${d.retryDelayMs}ms`;
-        modelsEl.innerHTML = d.chain
-          .map(
-            (m, i) => `
-            <div class="modelrow">
-              <div><span class="order">#${i + 1}</span><span class="name">${m.model}</span></div>
-              <div style="display:flex;align-items:center;gap:10px">
-                <span class="pill ${m.down ? "dn" : "up"}">${m.down ? "down" : "available"}</span>
-                <button class="toggle ${m.down ? "down" : ""}" data-model="${m.model}">${m.down ? "Bring up" : "Take down"}</button>
-              </div>
-            </div>`
-          )
-          .join("");
+        $("#models").innerHTML = d.chain.map((m, i) => `
+          <div class="modelrow ${m.down ? "down" : ""}">
+            <div><span class="order">#${i + 1}</span><span class="name">${m.model}</span></div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="pill ${m.down ? "dn" : "up"}">${m.down ? "down" : "available"}</span>
+              <button class="toggle ${m.down ? "down" : ""}" data-model="${m.model}">${m.down ? "Bring up" : "Take down"}</button>
+            </div>
+          </div>`).join("");
+        return d.chain;
       }
 
-      modelsEl.addEventListener("click", async (e) => {
+      $("#models").addEventListener("click", async (e) => {
         const btn = e.target.closest(".toggle");
         if (!btn) return;
         btn.disabled = true;
-        await fetch("/api/toggle", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ model: btn.dataset.model }),
-        });
-        await loadModels();
+        await toggle(btn.dataset.model);
+        await refresh();
       });
 
+      const toggle = (model) => fetch("/api/toggle", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model }) });
+
+      // ---- Banner / stats ----
+      async function loadBanner() {
+        const s = await (await fetch("/api/stats")).json();
+        const allDown = s.modelsTotal > 0 && s.modelsDown >= s.modelsTotal;
+        const banner = $("#banner");
+        banner.classList.toggle("down", allDown);
+        banner.querySelector(".label").childNodes[0].nodeValue = allDown ? "SERVICE: DOWN" : "SERVICE: UP";
+        $("#bannerSub").textContent = allDown
+          ? "every model is offline — requests will fail"
+          : (s.modelsDown > 0 ? `${s.modelsDown} model(s) offline · still serving via fallback` : "all systems answering");
+        $("#stDown").textContent = `${s.modelsDown}/${s.modelsTotal}`;
+        $("#stServed").textContent = s.served;
+        $("#stErr").textContent = s.failed;
+      }
+
       async function loadLog() {
-        const r = await fetch("/api/log");
-        const { log } = await r.json();
-        if (!log.length) { logEl.innerHTML = '<p class="empty">No requests yet.</p>'; return; }
-        logEl.innerHTML = `<table>
-          <thead><tr><th>Time</th><th>Result</th><th>Fallbacks</th><th>Trail</th></tr></thead>
-          <tbody>${log
-            .map((e) => {
-              const t = new Date(e.ts).toLocaleTimeString();
-              const trail = e.attempts.map((a) => `${a.model.replace("gemini-", "")}:${a.status}`).join(" → ");
-              return `<tr>
-                <td>${t}</td>
-                <td>${e.ok ? `<span class="ok mono">${e.servedBy}</span>` : '<span class="fail">all failed</span>'}</td>
-                <td>${e.fallbacks}</td>
-                <td class="mono" style="color:var(--muted)">${trail}</td>
-              </tr>`;
-            })
-            .join("")}</tbody></table>`;
+        const { log } = await (await fetch("/api/log")).json();
+        const el = $("#log");
+        if (!log.length) { el.innerHTML = '<p class="empty">No requests yet.</p>'; return; }
+        el.innerHTML = `<table><thead><tr><th>Time</th><th>Result</th><th>Fallbacks</th><th>Trail</th></tr></thead><tbody>${
+          log.map((e) => {
+            const t = new Date(e.ts).toLocaleTimeString();
+            const trail = e.attempts.map((a) => `${a.model.replace("gemini-", "")}:${a.status}`).join(" → ");
+            return `<tr><td>${t}</td><td>${e.ok ? `<span class="ok mono">${e.servedBy}</span>` : '<span class="fail">all failed</span>'}</td><td>${e.fallbacks}</td><td class="mono" style="color:var(--muted)">${trail}</td></tr>`;
+          }).join("")}</tbody></table>`;
       }
 
-      const icons = { ok: "✓", error: "✕", down: "⚠", trying: "•" };
-      const labels = { ok: "answered", error: "error → retry/fallback", down: "taken down → fallback", trying: "trying…" };
+      async function refresh() { await Promise.all([loadModels(), loadBanner(), loadLog()]); }
 
-      // Состояние текущей дорожки
-      let steps = [];      // {model, status, ms, reason, retry}
-      let badge = "";
-      let answerText = "";
-      let streaming = false;
+      // ---- Chaos ----
+      $("#killBtn").addEventListener("click", killRandom);
+      async function killRandom() {
+        const chain = await loadModels();
+        const up = chain.filter((m) => !m.down);
+        if (!up.length) return;
+        await toggle(up[Math.floor(Math.random() * up.length)].model);
+        await refresh();
+      }
+      $("#reviveBtn").addEventListener("click", async () => {
+        await fetch("/api/reset", { method: "POST" });
+        await refresh();
+      });
 
-      function renderTrail() {
-        let html = "";
-        html += badge;
-        html += '<div class="chain">';
-        for (const a of steps) {
-          const spin = a.status === "trying" ? " spin" : "";
-          html += `
-            <div class="step">
-              <div class="rail">
-                <div class="dot ${a.status}${spin}">${icons[a.status] || "?"}</div>
-                <div class="line"></div>
-              </div>
-              <div class="stepbody">
-                <div class="m">${a.model}${a.retry ? `<span class="meta tag">retry ${a.retry.n}/${a.retry.of}</span>` : ""}</div>
-                <div class="meta">
-                  ${labels[a.status] || a.status}
-                  ${a.ms ? ` · <span class="ms">${a.ms} ms</span>` : ""}
-                  ${a.reason ? ` · ${a.reason}` : ""}
-                </div>
-              </div>
-            </div>`;
+      const mainView = makeView($("#result"));
+      let chaosTimer = null;
+      $("#chaosBtn").addEventListener("click", async (e) => {
+        const btn = e.target;
+        if (chaosTimer) {
+          clearInterval(chaosTimer); chaosTimer = null;
+          btn.textContent = "▶ Auto-chaos"; btn.classList.remove("chaos-on");
+          return;
         }
-        html += "</div>";
-        if (answerText || streaming) {
-          html += `<div class="answer">${answerText.replace(/</g, "&lt;")}${streaming ? '<span class="caret"></span>' : ""}</div>`;
-        }
-        resultEl.innerHTML = html;
-      }
-
-      function setBadge(kind, text) {
-        const cls = kind === "ok" ? "badge" : kind === "fail" ? "badge fail" : "badge work";
-        badge = `<div class="${cls}">${text}</div>`;
-      }
-
-      async function send() {
-        const prompt = $("#prompt").value.trim();
-        if (!prompt) return;
-        const btn = $("#send");
-        btn.disabled = true;
-        steps = []; answerText = ""; streaming = true;
-        setBadge("work", "Walking the model chain…");
-        renderTrail();
-
-        try {
-          const resp = await fetch("/api/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt }),
-          });
-          const reader = resp.body.getReader();
-          const decoder = new TextDecoder();
-          let buf = "";
-          while (true) {
-            const { value, done } = await reader.read();
-            if (done) break;
-            buf += decoder.decode(value, { stream: true });
-            let nl;
-            while ((nl = buf.indexOf("\n\n")) >= 0) {
-              const raw = buf.slice(0, nl).trim();
-              buf = buf.slice(nl + 2);
-              if (!raw.startsWith("data:")) continue;
-              handleEvent(JSON.parse(raw.slice(5).trim()));
-            }
+        btn.textContent = "⏸ Stop chaos"; btn.classList.add("chaos-on");
+        const tick = async () => {
+          const chain = await loadModels();
+          const up = chain.filter((m) => !m.down);
+          // Если всё лежит — иногда воскрешаем, чтобы цикл продолжался.
+          if (!up.length || Math.random() < 0.2) {
+            if (!up.length) await fetch("/api/reset", { method: "POST" });
+          } else if (Math.random() < 0.7) {
+            await toggle(up[Math.floor(Math.random() * up.length)].model);
           }
-        } catch (e) {
-          setBadge("fail", "Network error: " + e);
-          streaming = false;
-          renderTrail();
-        } finally {
-          streaming = false;
-          renderTrail();
-          btn.disabled = false;
-          loadLog();
-        }
-      }
+          await runView(mainView, "Say a short cheerful greeting.", {});
+          await refresh();
+        };
+        tick();
+        chaosTimer = setInterval(tick, 4000);
+      });
 
-      function handleEvent(ev) {
-        if (ev.type === "attempt") {
-          // заменяем «trying» строку этой модели её финальным статусом, либо добавляем
-          const idx = steps.findIndex((s) => s.status === "trying" && s.model === ev.model);
-          const row = { model: ev.model, status: ev.status, ms: ev.ms, reason: ev.reason, retry: ev.retry };
-          if (idx >= 0) steps[idx] = row; else steps.push(row);
-        } else if (ev.type === "retry") {
-          setBadge("work", `Retrying ${ev.model} (${ev.next}/${ev.of}) after ${ev.delayMs}ms…`);
-        } else if (ev.type === "served") {
-          // модель начала отвечать — показываем «trying» пока летят токены
-          steps.push({ model: ev.model, status: "trying" });
-          setBadge("work", `Streaming from ${ev.model}…`);
-        } else if (ev.type === "token") {
-          answerText += ev.text;
-        } else if (ev.type === "done") {
-          const fb = ev.fallbacks;
-          setBadge("ok", `Answered by <b>${ev.servedBy}</b>${fb > 0 ? ` · fell back after ${fb} failure(s)` : " · on first try"}`);
-        } else if (ev.type === "failed") {
-          setBadge("fail", ev.error || "All models unavailable");
-        }
-        renderTrail();
-      }
+      // ---- A/B ----
+      const abLeft = makeView($("#abLeft"));
+      const abRight = makeView($("#abRight"));
+      $("#abBtn").addEventListener("click", async () => {
+        const p = $("#abPrompt").value.trim();
+        if (!p) return;
+        $("#abBtn").disabled = true;
+        await Promise.all([
+          runView(abLeft, p, { noFallback: true }),
+          runView(abRight, p, {}),
+        ]);
+        $("#abBtn").disabled = false;
+        await refresh();
+      });
 
-      $("#send").addEventListener("click", send);
-      loadModels();
-      loadLog();
+      // ---- Single ----
+      $("#send").addEventListener("click", async () => {
+        const p = $("#prompt").value.trim();
+        if (!p) return;
+        $("#send").disabled = true;
+        await runView(mainView, p, {});
+        $("#send").disabled = false;
+        await refresh();
+      });
+
+      refresh();
     </script>
   </body>
 </html>

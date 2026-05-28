@@ -22,6 +22,7 @@ const RETRY_DELAY_MS = Number(process.env.RETRY_DELAY_MS ?? 600);
 const downModels = new Set();
 const requestLog = []; // последние запросы, новые сверху
 const LOG_CAP = 50;
+const stats = { served: 0, failed: 0 }; // только «реальные» запросы (с фолбеком)
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -85,6 +86,21 @@ app.post("/api/toggle", (req, res) => {
 
 app.get("/api/log", (_req, res) => res.json({ log: requestLog }));
 
+app.get("/api/stats", (_req, res) => {
+  res.json({
+    served: stats.served,
+    failed: stats.failed,
+    modelsTotal: MODEL_CHAIN.length,
+    modelsDown: MODEL_CHAIN.filter((m) => downModels.has(m)).length,
+  });
+});
+
+// Поднять все модели (сброс хаоса).
+app.post("/api/reset", (_req, res) => {
+  downModels.clear();
+  res.json({ ok: true });
+});
+
 // Стриминговый чат: SSE-события attempt / token / served / done / failed.
 app.post("/api/chat", async (req, res) => {
   const prompt = (req.body?.prompt || "").toString().trim();
@@ -103,11 +119,16 @@ app.post("/api/chat", async (req, res) => {
     return res.end();
   }
 
+  // noFallback = режим «без фолбека»: только первая модель, без ретраев.
+  const noFallback = !!req.body?.noFallback;
+  const chain = noFallback ? MODEL_CHAIN.slice(0, 1) : MODEL_CHAIN;
+  const retries = noFallback ? 0 : RETRY_COUNT;
+
   const attempts = [];
   let answer = "";
   let servedBy = null;
 
-  outer: for (const model of MODEL_CHAIN) {
+  outer: for (const model of chain) {
     if (downModels.has(model)) {
       const a = { model, status: "down", ms: 0, reason: "Forced offline (manual toggle)" };
       attempts.push(a);
@@ -115,9 +136,9 @@ app.post("/api/chat", async (req, res) => {
       continue;
     }
 
-    for (let tryNo = 0; tryNo <= RETRY_COUNT; tryNo++) {
+    for (let tryNo = 0; tryNo <= retries; tryNo++) {
       const started = Date.now();
-      const retry = tryNo > 0 ? { n: tryNo, of: RETRY_COUNT } : null;
+      const retry = tryNo > 0 ? { n: tryNo, of: retries } : null;
       try {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 30000);
@@ -135,8 +156,8 @@ app.post("/api/chat", async (req, res) => {
           };
           attempts.push(a);
           send({ type: "attempt", ...a });
-          if (tryNo < RETRY_COUNT) {
-            send({ type: "retry", model, delayMs: RETRY_DELAY_MS, next: tryNo + 1, of: RETRY_COUNT });
+          if (tryNo < retries) {
+            send({ type: "retry", model, delayMs: RETRY_DELAY_MS, next: tryNo + 1, of: retries });
             await sleep(RETRY_DELAY_MS);
             continue;
           }
@@ -157,7 +178,7 @@ app.post("/api/chat", async (req, res) => {
         attempts.push(a);
         send({ type: "attempt", ...a });
         send({ type: "done", servedBy: model, fallbacks: attempts.filter((x) => x.status !== "ok").length });
-        logRequest({ prompt, servedBy: model, attempts, ok: true });
+        if (!noFallback) logRequest({ prompt, servedBy: model, attempts, ok: true });
         return res.end();
       } catch (e) {
         const a = {
@@ -166,8 +187,8 @@ app.post("/api/chat", async (req, res) => {
         };
         attempts.push(a);
         send({ type: "attempt", ...a });
-        if (tryNo < RETRY_COUNT) {
-          send({ type: "retry", model, delayMs: RETRY_DELAY_MS, next: tryNo + 1, of: RETRY_COUNT });
+        if (tryNo < retries) {
+          send({ type: "retry", model, delayMs: RETRY_DELAY_MS, next: tryNo + 1, of: retries });
           await sleep(RETRY_DELAY_MS);
           continue;
         }
@@ -177,11 +198,12 @@ app.post("/api/chat", async (req, res) => {
   }
 
   send({ type: "failed", error: "All models in the chain are unavailable" });
-  logRequest({ prompt, servedBy: null, attempts, ok: false });
+  if (!noFallback) logRequest({ prompt, servedBy: null, attempts, ok: false });
   res.end();
 });
 
 function logRequest({ prompt, servedBy, attempts, ok }) {
+  ok ? stats.served++ : stats.failed++;
   requestLog.unshift({
     ts: new Date().toISOString(),
     prompt: prompt.slice(0, 120),
