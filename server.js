@@ -11,7 +11,7 @@ const API_KEY = process.env.GEMINI_API_KEY;
 // Цепочка моделей по приоритету. Переопределяется через env MODEL_CHAIN.
 const MODEL_CHAIN = (process.env.MODEL_CHAIN
   ? process.env.MODEL_CHAIN.split(",").map((s) => s.trim())
-  : ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.0-flash"]
+  : ["gemini-2.5-flash-lite", "gemini-flash-lite-latest", "gemini-flash-latest"]
 ).filter(Boolean);
 
 // Сколько доп. попыток на одну модель перед фолбеком и пауза между ними.
