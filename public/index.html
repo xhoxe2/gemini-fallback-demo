@@ -6,142 +6,157 @@
     <title>Gemini Fallback Demo</title>
     <style>
       :root {
-        --bg: #f6f8fa;
+        --bg: #fafafa;
         --panel: #ffffff;
-        --border: #d8dee4;
-        --text: #1f2328;
-        --muted: #656d76;
-        --ok: #1a7f37;
-        --err: #cf222e;
-        --down: #9a6700;
-        --accent: #0969da;
+        --border: #e6e6e9;
+        --line: #efeff1;
+        --ink: #18181b;
+        --text: #3f3f46;
+        --muted: #9094a0;
+        --ok: #3f7d52;
+        --err: #c0392b;
+        --warn: #9a7b29;
       }
       * { box-sizing: border-box; }
       body {
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
         background: var(--bg);
         color: var(--text);
-        line-height: 1.5;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
       }
-      .wrap { max-width: 880px; margin: 0 auto; padding: 28px 20px 80px; }
-      h1 { font-size: 22px; margin: 0 0 4px; }
-      .sub { color: var(--muted); margin: 0 0 22px; font-size: 14px; }
+      .wrap { max-width: 860px; margin: 0 auto; padding: 40px 20px 90px; }
+      h1 { font-size: 20px; font-weight: 600; color: var(--ink); margin: 0 0 4px; letter-spacing: -.01em; }
+      .sub { color: var(--muted); margin: 0 0 26px; font-size: 14px; }
 
-      /* ===== Status banner ===== */
-      .banner {
-        border-radius: 14px; padding: 22px 26px; margin-bottom: 22px;
+      /* ===== Status bar ===== */
+      .status {
         display: flex; align-items: center; justify-content: space-between; gap: 20px;
-        color: #fff; transition: background .3s ease;
-        background: linear-gradient(135deg, #1a7f37, #2ea043);
-        box-shadow: 0 4px 18px rgba(26,127,55,.25);
-      }
-      .banner.down { background: linear-gradient(135deg, #b91c1c, #ef4444); box-shadow: 0 4px 18px rgba(207,34,46,.3); }
-      .banner .big { display: flex; align-items: center; gap: 14px; }
-      .banner .lamp {
-        width: 16px; height: 16px; border-radius: 50%; background: #fff;
-        box-shadow: 0 0 0 4px rgba(255,255,255,.35); animation: pulse 1.6s ease-in-out infinite;
-      }
-      @keyframes pulse { 50% { box-shadow: 0 0 0 9px rgba(255,255,255,.12); } }
-      .banner .label { font-size: 26px; font-weight: 800; letter-spacing: .02em; }
-      .banner .label small { display:block; font-size: 12px; font-weight: 500; opacity: .9; letter-spacing: 0; }
-      .banner .stats { display: flex; gap: 26px; text-align: right; }
-      .banner .stat .n { font-size: 26px; font-weight: 800; line-height: 1; }
-      .banner .stat .t { font-size: 11px; opacity: .9; text-transform: uppercase; letter-spacing: .04em; }
-
-      .card {
         background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
-        padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(31,35,40,.04);
+        padding: 18px 22px; margin-bottom: 22px;
       }
-      .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 0 0 14px; display:flex; justify-content:space-between; align-items:center; }
-      .card h2 .cfg { text-transform: none; letter-spacing: 0; font-weight: 400; }
+      .status .left { display: flex; align-items: center; gap: 12px; }
+      .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); flex: none; }
+      .status.down .dot { background: var(--err); }
+      .status .word { font-size: 15px; font-weight: 600; color: var(--ink); }
+      .status .word span { display: block; font-size: 12px; font-weight: 400; color: var(--muted); margin-top: 1px; }
+      .status .stats { display: flex; gap: 28px; }
+      .stat { text-align: right; }
+      .stat .n { font-size: 20px; font-weight: 600; color: var(--ink); line-height: 1.1; font-variant-numeric: tabular-nums; }
+      .stat .t { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
 
-      .models { display: flex; flex-direction: column; gap: 8px; }
-      .modelrow {
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg);
-        transition: opacity .3s, border-color .3s;
+      .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 18px; }
+      .card h2 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 14px; display: flex; justify-content: space-between; align-items: center; }
+      .card h2 .cfg { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--muted); }
+
+      .models { display: flex; flex-direction: column; gap: 6px; }
+      .modelrow { display: flex; align-items: center; justify-content: space-between; padding: 11px 12px; border: 1px solid var(--border); border-radius: 8px; transition: opacity .25s, border-color .25s; }
+      .modelrow.down { opacity: .5; }
+      .modelrow .order { color: var(--muted); margin-right: 10px; font-size: 12px; font-variant-numeric: tabular-nums; }
+      .modelrow .name { font-family: ui-monospace, "SF Mono", monospace; font-size: 13px; color: var(--ink); }
+      .modelrow .meta { display: flex; align-items: center; gap: 12px; }
+      .state { font-size: 12px; color: var(--ok); }
+      .modelrow.down .state { color: var(--muted); }
+
+      /* ===== Buttons ===== */
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+        height: 36px; padding: 0 14px; border: 1px solid var(--border); border-radius: 8px;
+        background: var(--panel); color: var(--text); font-size: 13px; font-weight: 500;
+        cursor: pointer; transition: border-color .15s, background .15s, color .15s; white-space: nowrap;
       }
-      .modelrow.down { opacity: .55; border-color: var(--down); }
-      .modelrow .name { font-family: ui-monospace, monospace; font-size: 14px; }
-      .modelrow .order { color: var(--muted); margin-right: 10px; font-size: 12px; }
-      .toggle { border: 1px solid var(--border); background: var(--panel); color: var(--text); padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; }
-      .toggle:hover { border-color: var(--muted); }
-      .toggle.down { border-color: var(--down); color: var(--down); }
-      .pill { font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
-      .pill.up { background: rgba(26,127,55,.12); color: var(--ok); }
-      .pill.dn { background: rgba(154,103,0,.12); color: var(--down); }
-
-      .chaos { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border); }
-      .btn { border: 1px solid var(--border); background: var(--panel); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
       .btn:hover { border-color: var(--muted); }
-      .btn.kill { border-color: var(--err); color: var(--err); }
-      .btn.chaos-on { background: var(--err); color: #fff; border-color: var(--err); }
-      .btn.accent { background: var(--accent); color:#fff; border-color: var(--accent); }
+      .btn svg { width: 15px; height: 15px; display: block; }
+      .btn.sm { height: 30px; padding: 0 11px; font-size: 12px; }
+      .btn.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+      .btn-primary { background: var(--ink); border-color: var(--ink); color: #fff; }
+      .btn-primary:hover { background: #000; border-color: #000; }
+      .btn-primary:disabled { opacity: .45; cursor: default; }
+
+      .chaos { display: flex; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+      .chaos .btn { flex: 1; }
+      .hint { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
 
       .inputrow { display: flex; gap: 10px; }
-      textarea { flex: 1; resize: vertical; min-height: 56px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 10px 12px; font-size: 14px; font-family: inherit; }
-      textarea:focus { outline: none; border-color: var(--accent); }
-      .send { background: var(--accent); border: none; color: #fff; font-weight: 600; padding: 0 22px; border-radius: 8px; cursor: pointer; font-size: 14px; }
-      .send:disabled { opacity: .5; cursor: default; }
+      textarea { flex: 1; resize: vertical; min-height: 52px; background: var(--panel); border: 1px solid var(--border); color: var(--ink); border-radius: 8px; padding: 10px 12px; font-size: 14px; font-family: inherit; }
+      textarea:focus { outline: none; border-color: var(--muted); }
+      .btn-primary.send { height: auto; padding: 0 20px; }
 
-      /* ===== Trails ===== */
+      /* ===== Trail ===== */
       .chain { display: flex; flex-direction: column; }
       .step { display: flex; align-items: flex-start; gap: 12px; }
       .rail { display: flex; flex-direction: column; align-items: center; }
-      .dot { width: 24px; height: 24px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; border: 2px solid var(--border); background: var(--panel); }
-      .dot.ok { border-color: var(--ok); color: var(--ok); }
-      .dot.error { border-color: var(--err); color: var(--err); }
-      .dot.down { border-color: var(--down); color: var(--down); }
-      .dot.trying { border-color: var(--accent); color: var(--accent); }
-      .dot.spin { animation: spin .8s linear infinite; }
+      .node { width: 22px; height: 22px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--border); color: var(--muted); background: var(--panel); }
+      .node svg { width: 12px; height: 12px; }
+      .node.ok { border-color: var(--ok); color: var(--ok); }
+      .node.error { border-color: var(--err); color: var(--err); }
+      .node.down { border-color: var(--warn); color: var(--warn); }
+      .node.trying { border-color: var(--ink); color: var(--ink); }
+      .node.trying svg { animation: spin .9s linear infinite; }
       @keyframes spin { to { transform: rotate(360deg); } }
-      .line { width: 2px; flex: 1; min-height: 22px; background: var(--border); }
+      .line { width: 1.5px; flex: 1; min-height: 20px; background: var(--line); }
       .step:last-child .line { display: none; }
       .stepbody { padding-bottom: 16px; flex: 1; }
-      .stepbody .m { font-family: ui-monospace, monospace; font-size: 13px; }
-      .stepbody .meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
-      .meta .ms { color: var(--text); }
-      .meta .tag { display:inline-block; background: rgba(9,105,218,.1); color: var(--accent); border-radius: 4px; padding: 0 5px; font-size: 11px; margin-left:4px; }
-      .badge { display: inline-block; margin-bottom: 12px; font-size: 13px; font-weight: 600; padding: 7px 12px; border-radius: 8px; background: rgba(26,127,55,.1); border: 1px solid var(--ok); color: var(--ok); }
-      .badge.fail { background: rgba(207,34,46,.1); border-color: var(--err); color: var(--err); }
-      .badge.work { background: rgba(9,105,218,.1); border-color: var(--accent); color: var(--accent); }
-      .answer { margin-top: 12px; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; white-space: pre-wrap; font-size: 13px; min-height: 18px; }
-      .answer .caret { display:inline-block; width:7px; height:14px; background:var(--accent); vertical-align:-2px; animation: blink 1s step-start infinite; }
+      .stepbody .m { font-family: ui-monospace, "SF Mono", monospace; font-size: 13px; color: var(--ink); }
+      .stepbody .info { font-size: 12px; color: var(--muted); margin-top: 1px; }
+      .info .ms { color: var(--text); }
+      .info .tag { display: inline-block; border: 1px solid var(--border); color: var(--muted); border-radius: 4px; padding: 0 5px; font-size: 11px; margin-left: 5px; }
+      .badge { display: inline-block; margin-bottom: 12px; font-size: 13px; font-weight: 500; padding: 6px 11px; border-radius: 7px; border: 1px solid var(--border); color: var(--text); background: var(--bg); }
+      .badge.ok { border-color: rgba(63,125,82,.4); color: var(--ok); }
+      .badge.fail { border-color: rgba(192,57,43,.4); color: var(--err); }
+      .badge b { font-weight: 600; }
+      .answer { margin-top: 12px; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; white-space: pre-wrap; font-size: 13px; color: var(--ink); min-height: 16px; }
+      .answer .caret { display: inline-block; width: 6px; height: 14px; background: var(--ink); vertical-align: -2px; animation: blink 1s step-start infinite; }
       @keyframes blink { 50% { opacity: 0; } }
-      .empty { color: var(--muted); font-size: 14px; }
-      .hint { font-size: 12px; color: var(--muted); margin-top: 10px; }
+      .empty { color: var(--muted); font-size: 14px; margin: 0; }
 
       /* ===== A/B ===== */
-      .ab { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .ab { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
       .col { border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
-      .col h3 { margin: 0 0 10px; font-size: 13px; }
-      .col.bad h3 { color: var(--err); }
-      .col.good h3 { color: var(--ok); }
-      @media (max-width: 680px) { .ab { grid-template-columns: 1fr; } .banner { flex-direction: column; align-items: flex-start; } .banner .stats { text-align: left; } }
+      .col h3 { margin: 0 0 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 7px; color: var(--ink); }
+      .col h3 svg { width: 14px; height: 14px; }
+      .col.bad h3 svg { color: var(--err); }
+      .col.good h3 svg { color: var(--ok); }
+      @media (max-width: 660px) { .ab { grid-template-columns: 1fr; } .status { flex-direction: column; align-items: flex-start; } }
 
       table { width: 100%; border-collapse: collapse; font-size: 13px; }
-      th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--border); }
-      th { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
-      td .mono { font-family: ui-monospace, monospace; }
+      th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); }
+      th { color: var(--muted); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+      td .mono { font-family: ui-monospace, "SF Mono", monospace; }
       td .ok { color: var(--ok); } td .fail { color: var(--err); }
     </style>
   </head>
   <body>
+    <!-- icon defs -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <defs>
+        <g id="i-zap"><path d="M13 2 4 13h6l-1 9 9-11h-6l1-9z" fill="currentColor" stroke="none"/></g>
+        <g id="i-revive"><path d="M21 12a9 9 0 1 1-2.64-6.36" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M21 4v5h-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <g id="i-play"><path d="M7 5l12 7-12 7z" fill="currentColor" stroke="none"/></g>
+        <g id="i-pause"><rect x="6.5" y="5" width="3.5" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="3.5" height="14" rx="1" fill="currentColor"/></g>
+        <g id="i-check"><path d="M4 12.5l5 5L20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <g id="i-x"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></g>
+        <g id="i-warn"><path d="M12 3 1.5 21h21z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17.5" r="1" fill="currentColor"/></g>
+        <g id="i-dot"><circle cx="12" cy="12" r="4" fill="currentColor"/></g>
+        <g id="i-spin"><path d="M12 3a9 9 0 1 0 9 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></g>
+      </defs>
+    </svg>
+
     <div class="wrap">
       <h1>Gemini Fallback Demo</h1>
-      <p class="sub">Knock models offline and watch the service keep answering. Requests walk the chain top to bottom, retry, then fall back.</p>
+      <p class="sub">Take models offline and watch the service keep answering. Each request walks the chain, retries, then falls back.</p>
 
-      <!-- STATUS BANNER -->
-      <div class="banner" id="banner">
-        <div class="big">
-          <div class="lamp"></div>
-          <div class="label">SERVICE: UP<small id="bannerSub">all systems answering</small></div>
+      <!-- STATUS -->
+      <div class="status" id="status">
+        <div class="left">
+          <span class="dot"></span>
+          <span class="word"><span id="statusWord">Service up</span><span id="statusSub">all systems answering</span></span>
         </div>
         <div class="stats">
           <div class="stat"><div class="n" id="stDown">0/0</div><div class="t">models down</div></div>
-          <div class="stat"><div class="n" id="stServed">0</div><div class="t">requests served</div></div>
-          <div class="stat"><div class="n" id="stErr">0</div><div class="t">errors to users</div></div>
+          <div class="stat"><div class="n" id="stServed">0</div><div class="t">served</div></div>
+          <div class="stat"><div class="n" id="stErr">0</div><div class="t">errors</div></div>
         </div>
       </div>
 
@@ -150,24 +165,24 @@
         <h2>Model chain <span class="cfg" id="cfg"></span></h2>
         <div class="models" id="models"></div>
         <div class="chaos">
-          <button class="btn kill" id="killBtn">🔥 Kill random model</button>
-          <button class="btn" id="reviveBtn">↻ Revive all</button>
-          <button class="btn chaos" id="chaosBtn">▶ Auto-chaos</button>
-          <span class="hint" id="chaosHint" style="margin:auto 0">Auto-chaos kills models at random and fires a request every 4s.</span>
+          <button class="btn" id="killBtn"><svg viewBox="0 0 24 24"><use href="#i-zap"/></svg>Kill random</button>
+          <button class="btn" id="reviveBtn"><svg viewBox="0 0 24 24"><use href="#i-revive"/></svg>Revive all</button>
+          <button class="btn" id="chaosBtn"><svg viewBox="0 0 24 24"><use href="#i-play" id="chaosIco"/></svg><span id="chaosLbl">Auto-chaos</span></button>
         </div>
+        <p class="hint">Auto-chaos randomly takes models offline and fires a request every 4s.</p>
       </div>
 
       <!-- A/B -->
       <div class="card">
-        <h2>Side by side: no fallback vs fallback</h2>
-        <div class="inputrow" style="margin-bottom:14px">
+        <h2>No fallback vs fallback</h2>
+        <div class="inputrow">
           <textarea id="abPrompt">Say hi in 3 words.</textarea>
-          <button class="send" id="abBtn">Run A/B</button>
+          <button class="btn-primary send" id="abBtn">Run A/B</button>
         </div>
-        <p class="hint" style="margin-top:0">Tip: take down the top model (or run auto-chaos), then hit “Run A/B”. The left column errors out; the right one falls back and still answers.</p>
-        <div class="ab" style="margin-top:14px">
-          <div class="col bad"><h3>✕ Without fallback (top model only)</h3><div id="abLeft"><p class="empty">—</p></div></div>
-          <div class="col good"><h3>✓ With fallback (full chain)</h3><div id="abRight"><p class="empty">—</p></div></div>
+        <p class="hint">Take down the top model (or run auto-chaos), then run this. Left errors out; right falls back and still answers.</p>
+        <div class="ab">
+          <div class="col bad"><h3><svg viewBox="0 0 24 24"><use href="#i-x"/></svg>Without fallback</h3><div id="abLeft"><p class="empty">—</p></div></div>
+          <div class="col good"><h3><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>With fallback</h3><div id="abRight"><p class="empty">—</p></div></div>
         </div>
       </div>
 
@@ -176,9 +191,9 @@
         <h2>Single request</h2>
         <div class="inputrow">
           <textarea id="prompt">Explain in two sentences what a fallback chain is and why it is useful.</textarea>
-          <button class="send" id="send">Send</button>
+          <button class="btn-primary send" id="send">Send</button>
         </div>
-        <div id="result" style="margin-top:14px"><p class="empty">Send a prompt — the attempt trail and streamed answer will appear here.</p></div>
+        <div id="result" style="margin-top:14px"><p class="empty">Send a prompt — the attempt trail and streamed answer appear here.</p></div>
       </div>
 
       <!-- LOG -->
@@ -190,16 +205,11 @@
 
     <script>
       const $ = (s) => document.querySelector(s);
-      const icons = { ok: "✓", error: "✕", down: "⚠", trying: "•" };
+      const NODE = { ok: "i-check", error: "i-x", down: "i-warn", trying: "i-spin" };
       const labels = { ok: "answered", error: "error → retry/fallback", down: "taken down → fallback", trying: "trying…" };
 
-      // ---- SSE streaming into a callback ----
       async function streamChat(prompt, opts, onEvent) {
-        const resp = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt, ...opts }),
-        });
+        const resp = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ prompt, ...opts }) });
         const reader = resp.body.getReader();
         const dec = new TextDecoder();
         let buf = "";
@@ -216,24 +226,23 @@
         }
       }
 
-      // ---- A view = its own trail state + render target ----
-      function makeView(el, { compact } = {}) {
+      function makeView(el) {
         const v = { steps: [], badge: "", answer: "", streaming: false };
+        const icon = (s) => `<svg viewBox="0 0 24 24"><use href="#${NODE[s] || "i-dot"}"/></svg>`;
         v.render = () => {
           let h = v.badge;
           h += '<div class="chain">';
           for (const a of v.steps) {
-            const spin = a.status === "trying" ? " spin" : "";
-            h += `<div class="step"><div class="rail"><div class="dot ${a.status}${spin}">${icons[a.status] || "?"}</div><div class="line"></div></div>
-              <div class="stepbody"><div class="m">${a.model}${a.retry ? `<span class="meta tag">retry ${a.retry.n}/${a.retry.of}</span>` : ""}</div>
-              <div class="meta">${labels[a.status] || a.status}${a.ms ? ` · <span class="ms">${a.ms} ms</span>` : ""}${a.reason ? ` · ${a.reason}` : ""}</div></div></div>`;
+            h += `<div class="step"><div class="rail"><div class="node ${a.status}">${icon(a.status)}</div><div class="line"></div></div>
+              <div class="stepbody"><div class="m">${a.model}${a.retry ? `<span class="info tag">retry ${a.retry.n}/${a.retry.of}</span>` : ""}</div>
+              <div class="info">${labels[a.status] || a.status}${a.ms ? ` · <span class="ms">${a.ms} ms</span>` : ""}${a.reason ? ` · ${a.reason}` : ""}</div></div></div>`;
           }
           h += "</div>";
           if (v.answer || v.streaming) h += `<div class="answer">${v.answer.replace(/</g, "&lt;")}${v.streaming ? '<span class="caret"></span>' : ""}</div>`;
           el.innerHTML = h;
         };
         v.setBadge = (kind, text) => {
-          const cls = kind === "ok" ? "badge" : kind === "fail" ? "badge fail" : "badge work";
+          const cls = kind === "ok" ? "badge ok" : kind === "fail" ? "badge fail" : "badge";
           v.badge = `<div class="${cls}">${text}</div>`;
         };
         v.handle = (ev) => {
@@ -260,55 +269,41 @@
       }
 
       async function runView(v, prompt, opts) {
-        v.reset();
-        v.setBadge("work", "Walking the model chain…");
-        v.render();
-        try {
-          await streamChat(prompt, opts, v.handle);
-        } catch (e) {
-          v.setBadge("fail", "Network error: " + e);
-        } finally {
-          v.streaming = false;
-          v.render();
-        }
+        v.reset(); v.setBadge("work", "Walking the model chain…"); v.render();
+        try { await streamChat(prompt, opts, v.handle); }
+        catch (e) { v.setBadge("fail", "Network error: " + e); }
+        finally { v.streaming = false; v.render(); }
       }
 
-      // ---- Models panel ----
       async function loadModels() {
-        const r = await fetch("/api/models");
-        const d = await r.json();
+        const d = await (await fetch("/api/models")).json();
         $("#cfg").textContent = `retries: ${d.retryCount} · delay: ${d.retryDelayMs}ms`;
         $("#models").innerHTML = d.chain.map((m, i) => `
           <div class="modelrow ${m.down ? "down" : ""}">
             <div><span class="order">#${i + 1}</span><span class="name">${m.model}</span></div>
-            <div style="display:flex;align-items:center;gap:10px">
-              <span class="pill ${m.down ? "dn" : "up"}">${m.down ? "down" : "available"}</span>
-              <button class="toggle ${m.down ? "down" : ""}" data-model="${m.model}">${m.down ? "Bring up" : "Take down"}</button>
+            <div class="meta">
+              <span class="state">${m.down ? "offline" : "available"}</span>
+              <button class="btn sm" data-model="${m.model}">${m.down ? "Bring up" : "Take down"}</button>
             </div>
           </div>`).join("");
         return d.chain;
       }
 
       $("#models").addEventListener("click", async (e) => {
-        const btn = e.target.closest(".toggle");
+        const btn = e.target.closest("button[data-model]");
         if (!btn) return;
         btn.disabled = true;
         await toggle(btn.dataset.model);
         await refresh();
       });
-
       const toggle = (model) => fetch("/api/toggle", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model }) });
 
-      // ---- Banner / stats ----
-      async function loadBanner() {
+      async function loadStatus() {
         const s = await (await fetch("/api/stats")).json();
         const allDown = s.modelsTotal > 0 && s.modelsDown >= s.modelsTotal;
-        const banner = $("#banner");
-        banner.classList.toggle("down", allDown);
-        banner.querySelector(".label").childNodes[0].nodeValue = allDown ? "SERVICE: DOWN" : "SERVICE: UP";
-        $("#bannerSub").textContent = allDown
-          ? "every model is offline — requests will fail"
-          : (s.modelsDown > 0 ? `${s.modelsDown} model(s) offline · still serving via fallback` : "all systems answering");
+        $("#status").classList.toggle("down", allDown);
+        $("#statusWord").textContent = allDown ? "Service down" : "Service up";
+        $("#statusSub").textContent = allDown ? "every model is offline" : (s.modelsDown > 0 ? `${s.modelsDown} offline · serving via fallback` : "all systems answering");
         $("#stDown").textContent = `${s.modelsDown}/${s.modelsTotal}`;
         $("#stServed").textContent = s.served;
         $("#stErr").textContent = s.failed;
@@ -326,41 +321,33 @@
           }).join("")}</tbody></table>`;
       }
 
-      async function refresh() { await Promise.all([loadModels(), loadBanner(), loadLog()]); }
+      async function refresh() { await Promise.all([loadModels(), loadStatus(), loadLog()]); }
 
-      // ---- Chaos ----
-      $("#killBtn").addEventListener("click", killRandom);
-      async function killRandom() {
+      // chaos
+      $("#killBtn").addEventListener("click", async () => {
         const chain = await loadModels();
         const up = chain.filter((m) => !m.down);
         if (!up.length) return;
         await toggle(up[Math.floor(Math.random() * up.length)].model);
         await refresh();
-      }
-      $("#reviveBtn").addEventListener("click", async () => {
-        await fetch("/api/reset", { method: "POST" });
-        await refresh();
       });
+      $("#reviveBtn").addEventListener("click", async () => { await fetch("/api/reset", { method: "POST" }); await refresh(); });
 
       const mainView = makeView($("#result"));
       let chaosTimer = null;
-      $("#chaosBtn").addEventListener("click", async (e) => {
-        const btn = e.target;
+      $("#chaosBtn").addEventListener("click", async () => {
+        const btn = $("#chaosBtn");
         if (chaosTimer) {
           clearInterval(chaosTimer); chaosTimer = null;
-          btn.textContent = "▶ Auto-chaos"; btn.classList.remove("chaos-on");
+          btn.classList.remove("active"); $("#chaosLbl").textContent = "Auto-chaos"; $("#chaosIco").setAttribute("href", "#i-play");
           return;
         }
-        btn.textContent = "⏸ Stop chaos"; btn.classList.add("chaos-on");
+        btn.classList.add("active"); $("#chaosLbl").textContent = "Stop chaos"; $("#chaosIco").setAttribute("href", "#i-pause");
         const tick = async () => {
           const chain = await loadModels();
           const up = chain.filter((m) => !m.down);
-          // Если всё лежит — иногда воскрешаем, чтобы цикл продолжался.
-          if (!up.length || Math.random() < 0.2) {
-            if (!up.length) await fetch("/api/reset", { method: "POST" });
-          } else if (Math.random() < 0.7) {
-            await toggle(up[Math.floor(Math.random() * up.length)].model);
-          }
+          if (!up.length) { await fetch("/api/reset", { method: "POST" }); }
+          else if (Math.random() < 0.7) { await toggle(up[Math.floor(Math.random() * up.length)].model); }
           await runView(mainView, "Say a short cheerful greeting.", {});
           await refresh();
         };
@@ -368,22 +355,19 @@
         chaosTimer = setInterval(tick, 4000);
       });
 
-      // ---- A/B ----
+      // A/B
       const abLeft = makeView($("#abLeft"));
       const abRight = makeView($("#abRight"));
       $("#abBtn").addEventListener("click", async () => {
         const p = $("#abPrompt").value.trim();
         if (!p) return;
         $("#abBtn").disabled = true;
-        await Promise.all([
-          runView(abLeft, p, { noFallback: true }),
-          runView(abRight, p, {}),
-        ]);
+        await Promise.all([runView(abLeft, p, { noFallback: true }), runView(abRight, p, {})]);
         $("#abBtn").disabled = false;
         await refresh();
       });
 
-      // ---- Single ----
+      // single
       $("#send").addEventListener("click", async () => {
         const p = $("#prompt").value.trim();
         if (!p) return;
